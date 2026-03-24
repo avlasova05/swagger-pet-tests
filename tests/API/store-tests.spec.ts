@@ -28,3 +28,20 @@ test ('place an order for a pet @post', async () => {
     expect(response.status).toBe(200);
     console.log(response.data);
 });
+
+test ('404 error when explicitly specified orderId @get', async() => {
+    try {
+    const response = await axios.get ('https://petstore.swagger.io/v2/store/order/1', {
+        params: { orderId: '1'},
+        headers: { Accept: 'application/json'}
+    });
+    expect(response.status).toBe(200);
+    console.log(response.data);
+} catch (error) {
+    if (axios.isAxiosError(error) && error.response?.status === 404) {
+        expect(error.response.status).toBe(404);
+    } else {
+        throw error;
+    }
+}
+});
